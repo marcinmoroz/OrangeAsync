@@ -12,7 +12,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 @Service
-@Async
+@Async("contractsExecutor")
 public class CustomerContractService {
   private Integer waitTimeMilliseconds = 1000;
 

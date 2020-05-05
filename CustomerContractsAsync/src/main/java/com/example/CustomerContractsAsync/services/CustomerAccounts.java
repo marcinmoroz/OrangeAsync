@@ -9,10 +9,11 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
-@Service
 @Async("accountsExecutor")
+@Service
 public class CustomerAccounts {
   private Integer waitTimeMilliseconds = 50;
+
 
   public CompletableFuture<List<String>> getCustomerAccounts() throws InterruptedException {
     TimeUnit.MILLISECONDS.sleep(waitTimeMilliseconds);

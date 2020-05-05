@@ -16,7 +16,7 @@ import java.util.concurrent.Executor;
 @EnableAsync
 @SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
 @PropertySource("classpath:/application.yaml")
-public class CustomerContractsApplication  extends AsyncConfigurerSupport {
+public class CustomerContractsApplication  {
 
 	public static void main(String[] args) {
 		SpringApplication.run(CustomerContractsApplication.class, args);
@@ -27,11 +27,12 @@ public class CustomerContractsApplication  extends AsyncConfigurerSupport {
 		return builder.build();
 	}
 
-  @Override
+  @Bean(name ="contractsExecutor")
   public Executor getAsyncExecutor() {
     ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-    executor.setCorePoolSize(5);
-    executor.setMaxPoolSize(10);
+    executor.setCorePoolSize(10);
+    executor.setMaxPoolSize(40);
+    executor.setQueueCapacity(10);
 
     executor.setThreadNamePrefix("Contracts-");
     executor.initialize();
@@ -40,9 +41,13 @@ public class CustomerContractsApplication  extends AsyncConfigurerSupport {
 
   @Bean(name ="accountsExecutor")
   public Executor getaccountsExecutor() {
+//		CustomizableThreadFactory factory = new CustomizableThreadFactory("Accounts-");
+//		ExecutorService service = Executors.newCachedThreadPool(factory);
+//		return service;
     ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-    executor.setCorePoolSize(5);
-    executor.setMaxPoolSize(10);
+    executor.setCorePoolSize(10);
+    executor.setMaxPoolSize(40);
+    executor.setQueueCapacity(10);
 
     executor.setThreadNamePrefix("Accounts-");
     executor.initialize();

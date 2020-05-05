@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
+@Async("contractsExecutor")
 @Service
-@Async
 public class CustomerContractService {
   private Integer waitTimeMilliseconds = 1000;
 
