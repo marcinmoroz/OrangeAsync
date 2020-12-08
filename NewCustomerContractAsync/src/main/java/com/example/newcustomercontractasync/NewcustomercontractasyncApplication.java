@@ -1,4 +1,4 @@
-package com.example.CustomerContractsAsync;
+package com.example.newcustomercontractasync;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,23 +6,19 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.scheduling.annotation.AsyncConfigurerSupport;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @EnableAsync
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @PropertySource("classpath:/application.yaml")
-public class CustomerContractsApplication {
+public class NewcustomercontractasyncApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(CustomerContractsApplication.class, args);
+        SpringApplication.run(NewcustomercontractasyncApplication.class, args);
     }
 
     @Bean
@@ -56,4 +52,5 @@ public class CustomerContractsApplication {
         executor.initialize();
         return executor;
     }
+
 }

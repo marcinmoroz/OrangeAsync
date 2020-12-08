@@ -1,0 +1,7 @@
+server:
+  servlet.context-path: /CustomerContracts
+  port: 8093
+
+spring.application.name: CustomerContractsAsync
+
+server.tomcat.max-threads: 20

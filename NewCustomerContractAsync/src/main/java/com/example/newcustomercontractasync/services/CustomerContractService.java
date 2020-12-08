@@ -1,4 +1,4 @@
-package com.example.CustomerContractsAsync.services;
+package com.example.newcustomercontractasync.services;
 
 import lombok.var;
 import org.springframework.scheduling.annotation.Async;
