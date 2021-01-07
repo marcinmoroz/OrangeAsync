@@ -4,7 +4,9 @@ import feign.Logger;
 import feign.Request;
 import feign.Response;
 import feign.Util;
+import io.opentracing.Tracer;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StopWatch;
 
 import java.io.IOException;
@@ -12,6 +14,9 @@ import java.io.IOException;
 @Log4j2
 public class OccFeignLogger extends Logger {
     StopWatch requestWatcher;
+    @Autowired
+    private Tracer tracer;
+
     @Override
     protected void log(String s, String s1, Object... objects) {
 
@@ -21,6 +26,10 @@ public class OccFeignLogger extends Logger {
     protected void logRequest(String configKey, Level logLevel, Request request) {
         requestWatcher = new StopWatch();
         requestWatcher.start();
+        String requestBody = request.toString();
+        log.info("Request start");
+        log.info("Request : " + requestBody);
+        log.info("Headers" + request.headers());
     }
 
     @Override
@@ -28,6 +37,7 @@ public class OccFeignLogger extends Logger {
         if(requestWatcher != null) {
             requestWatcher.stop();
         }
+        log.info("Time : " + requestWatcher.getTotalTimeSeconds());
         if (response.body() != null) {
             String result="";
             byte[] bodyData = Util.toByteArray(response.body().asInputStream());
@@ -37,9 +47,10 @@ public class OccFeignLogger extends Logger {
             }
             Response build = response.toBuilder().body(bodyData).build();
             Request request = build.request();
+            String requestBody = request.toString();
             String bodyText =  request.charset() != null ? new String(request.body(), request.charset()) : null;
-            log.info("Time : " + requestWatcher.getTotalTimeSeconds());
-            log.info(bodyText);
+            //log.info("B" + bodyText);
+            log.info("Request : " + requestBody);
             // request URL request.url()
             // request parameter bodyText
             // request result
