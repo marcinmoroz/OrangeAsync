@@ -15,6 +15,8 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.openfeign.support.SpringMvcContract;
 import org.springframework.context.annotation.Bean;
 
+import java.util.UUID;
+
 @EnableFeignClients
 @SpringBootApplication
 @Log4j2
@@ -52,17 +54,15 @@ public class FeignClientTestApplication  implements CommandLineRunner {
                 .start();
         tracer.activateSpan(span);
         span.log("Start");
+        span.setTag("NotGlobalID",UUID.randomUUID().toString());
+        span.setBaggageItem("GlobalId", UUID.randomUUID().toString());
         try {
                 Span spanChild = tracer.buildSpan("localSpan-child")
                         .start();
                 tracer.activateSpan(spanChild);
                 spanChild.log("Child doing something");
+                spanChild.log("Baggage : " + spanChild.getBaggageItem("GlobalId"));
 
-//            CustomerContractsService customerClient = Feign.builder().
-//                    contract(new SpringMvcContract()).
-//                    logger(new OccFeignLogger()).
-//                    logLevel(Logger.Level.FULL).
-//                    target(CustomerContractsService.class, "http://localhost:8093/CustomerContracts");
             String response = customerClient.getCustomerAcount();
             log.info("Response :{}", response);
             spanChild.finish();

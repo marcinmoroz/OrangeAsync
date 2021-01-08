@@ -30,6 +30,10 @@ public class OccFeignLogger extends Logger {
         log.info("Request start");
         log.info("Request : " + requestBody);
         log.info("Headers" + request.headers());
+        request.headers().forEach((s, strings) -> {
+            log.info("Header : " + s);
+            log.info(String.join(";",strings));
+        });
     }
 
     @Override
@@ -51,6 +55,11 @@ public class OccFeignLogger extends Logger {
             String bodyText =  request.charset() != null ? new String(request.body(), request.charset()) : null;
             //log.info("B" + bodyText);
             log.info("Request : " + requestBody);
+            log.info("List of requestheaders" );
+            request.headers().forEach((s, strings) -> {
+                log.info("Header : " + s);
+                log.info(String.join(";",strings));
+            });
             // request URL request.url()
             // request parameter bodyText
             // request result
