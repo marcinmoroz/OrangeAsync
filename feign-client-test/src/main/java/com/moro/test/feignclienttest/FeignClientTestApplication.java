@@ -1,8 +1,10 @@
 package com.moro.test.feignclienttest;
 
+import com.moro.test.commons.models.Account;
 import com.moro.test.feignclienttest.tools.OccFeignLogger;
 import feign.Feign;
 import feign.Logger;
+import feign.RequestInterceptor;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
 import lombok.SneakyThrows;
@@ -14,7 +16,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.openfeign.support.SpringMvcContract;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
+import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 @EnableFeignClients
@@ -22,20 +27,32 @@ import java.util.UUID;
 @Log4j2
 public class FeignClientTestApplication  implements CommandLineRunner {
 
+    @Configuration
+    class FeignConfiguration {
+        @Bean
+        Logger.Level feignLoggerLevel() {
+            return Logger.Level.FULL;
+        }
+
+        @Bean
+        Logger feignLogger() {
+            return new OccFeignLogger();
+        }
+
+        @Bean
+        public RequestInterceptor requestInterceptor() {
+            return requestTemplate -> {
+                requestTemplate.header("systemName", "feignClient");
+                requestTemplate.header("time", Instant.now().toString());
+            };
+        }
+    }
+
+
     @Autowired
-    CustomerContractsService customerClient;
+    CustomerAccountssService customerClient;
     @Autowired
     private Tracer tracer;
-
-    @Bean
-    Logger.Level feignLoggerLevel() {
-        return Logger.Level.FULL;
-    }
-
-    @Bean
-    Logger feignLogger() {
-        return new OccFeignLogger();
-    }
 
     public static void main(String[] args) {
         log.info("STARTING THE APPLICATION");
@@ -63,8 +80,10 @@ public class FeignClientTestApplication  implements CommandLineRunner {
                 spanChild.log("Child doing something");
                 spanChild.log("Baggage : " + spanChild.getBaggageItem("GlobalId"));
 
-            String response = customerClient.getCustomerAcount();
+            String response = customerClient.getCustomerAccountNumber();
             log.info("Response :{}", response);
+            List<Account> accounts = customerClient.getCustomerAccounts();
+            accounts.forEach( a -> log.info("Account : " + a.toString()));
             spanChild.finish();
         } catch (Exception e) {
             log.error(e);

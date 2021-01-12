@@ -7,11 +7,10 @@
     <packaging>pom</packaging>
     <name>Async presentation</name>
     <modules>
-        <module>./CustomerContracts</module>
-        <module>./CustomerContractsAsync</module>
         <module>./NewCustomerContractAsync</module>
-        <module>./WebClientTest</module>
+        <module>./NewCustomerAccountAsync</module>
         <module>./feign-client-test</module>
+        <module>./commons</module>
     </modules>
 
     <parent>
@@ -58,6 +57,11 @@
                 <groupId>io.opentracing.contrib</groupId>
                 <artifactId>opentracing-spring-jaeger-cloud-starter</artifactId>
                 <version>3.2.2</version>
+            </dependency>
+            <dependency>
+                <groupId>com.moro.test</groupId>
+                <artifactId>commons</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

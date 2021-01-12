@@ -1,5 +1,6 @@
-package com.example.newcustomercontractasync;
+package com.example.newcustomeraccountasync;
 
+import com.example.newcustomercontractasync.NewcustomercontractasyncApplication;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,7 +18,7 @@ import java.util.concurrent.Executor;
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @PropertySource("classpath:/application.yaml")
 @Log4j2
-public class NewcustomercontractasyncApplication {
+public class NewcCustomerAccountAsyncApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(NewcustomercontractasyncApplication.class, args);
