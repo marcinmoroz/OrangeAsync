@@ -3,5 +3,8 @@ server:
   port: 8093
 
 spring.application.name: CustomerContractsAsync
-
 server.tomcat.max-threads: 20
+
+
+opentracing.jaeger.http-sender.url : http://localhost:14268/api/traces
+opentracing.jaeger.log-spans : true

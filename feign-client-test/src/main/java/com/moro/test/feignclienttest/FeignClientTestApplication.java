@@ -13,10 +13,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.openfeign.support.SpringMvcContract;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
 import java.util.List;
@@ -26,6 +30,11 @@ import java.util.UUID;
 @SpringBootApplication
 @Log4j2
 public class FeignClientTestApplication  implements CommandLineRunner {
+
+    @Bean
+    public RestTemplate restTemplate(RestTemplateBuilder builder) {
+        return builder.build();
+    }
 
     @Configuration
     class FeignConfiguration {
@@ -49,6 +58,8 @@ public class FeignClientTestApplication  implements CommandLineRunner {
     }
 
 
+    @Autowired
+    RestTemplate restTemplate;
     @Autowired
     CustomerAccountssService customerClient;
     @Autowired
@@ -74,17 +85,15 @@ public class FeignClientTestApplication  implements CommandLineRunner {
         span.setTag("NotGlobalID",UUID.randomUUID().toString());
         span.setBaggageItem("GlobalId", UUID.randomUUID().toString());
         try {
-                Span spanChild = tracer.buildSpan("localSpan-child")
-                        .start();
-                tracer.activateSpan(spanChild);
-                spanChild.log("Child doing something");
-                spanChild.log("Baggage : " + spanChild.getBaggageItem("GlobalId"));
-
+            log.info("Baggage items");
+            span.context().baggageItems().forEach(bI -> log.info(bI.getKey() + "||"+bI.getValue()));
+            List<Account> accounts = restTemplate.exchange("http://localhost:8093/CustomerContracts/accounts/getCustomerAcounts", HttpMethod.GET, null,
+                    new ParameterizedTypeReference<List<Account>>(){}).getBody();
+            accounts.forEach( a -> log.info("Account : " + a.toString()));
             String response = customerClient.getCustomerAccountNumber();
             log.info("Response :{}", response);
-            List<Account> accounts = customerClient.getCustomerAccounts();
+            accounts = customerClient.getCustomerAccounts();
             accounts.forEach( a -> log.info("Account : " + a.toString()));
-            spanChild.finish();
         } catch (Exception e) {
             log.error(e);
         }
