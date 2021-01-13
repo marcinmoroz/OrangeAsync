@@ -7,10 +7,11 @@
     <packaging>pom</packaging>
     <name>Async presentation</name>
     <modules>
-        <module>./NewCustomerContractAsync</module>
-        <module>./NewCustomerAccountAsync</module>
-        <module>./feign-client-test</module>
         <module>./commons</module>
+        <module>./NewCustomerContractAsync</module>
+        <module>./newcustomeraccountasync</module>
+        <module>./feign-client-test</module>
+
     </modules>
 
     <parent>

@@ -1,11 +1,12 @@
-package com.example.newcustomercontractasync.resources;
+package pl.orange.opl.newcustomeraccountasync.resources;
 
 import com.moro.test.commons.models.Account;
-import com.example.newcustomercontractasync.services.CustomerAccounts;
-import com.example.newcustomercontractasync.services.CustomerContractService;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import pl.orange.opl.newcustomeraccountasync.services.CustomerAccounts;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -17,9 +18,15 @@ import java.util.concurrent.ExecutionException;
 public class CustomerAccountResource {
     @Autowired
     private CustomerAccounts customerAccounts;
+    @Autowired
+    private Tracer tracer;
 
     @GetMapping("/getCustomerAcounts")
     public CompletableFuture<List<Account>> getCustomerAcounts() throws InterruptedException {
+
+        Span span = tracer.activeSpan();
+        log.info("Baggage items");
+        span.context().baggageItems().forEach(bI -> log.info(bI.getKey() + "||"+bI.getValue()));
         return customerAccounts.getCustomerAccounts();
     }
 

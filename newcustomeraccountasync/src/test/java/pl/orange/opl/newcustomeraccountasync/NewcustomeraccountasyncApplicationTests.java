@@ -1,10 +1,10 @@
-package com.example.newcustomeraccountasync;
+package pl.orange.opl.newcustomeraccountasync;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class NewCustomerAccountAsyncApplicationTests {
+class NewcustomeraccountasyncApplicationTests {
 
     @Test
     void contextLoads() {

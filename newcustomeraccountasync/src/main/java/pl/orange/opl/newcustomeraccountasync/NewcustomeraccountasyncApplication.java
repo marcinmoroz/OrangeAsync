@@ -1,27 +1,19 @@
-package com.example.newcustomeraccountasync;
+package pl.orange.opl.newcustomeraccountasync;
 
-import com.example.newcustomercontractasync.NewcustomercontractasyncApplication;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.concurrent.Executor;
 
-@EnableAsync
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
-@PropertySource("classpath:/application.yaml")
-@Log4j2
-public class NewcCustomerAccountAsyncApplication {
+@SpringBootApplication
+public class NewcustomeraccountasyncApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(NewcustomercontractasyncApplication.class, args);
+        SpringApplication.run(NewcustomeraccountasyncApplication.class, args);
     }
 
     @Bean

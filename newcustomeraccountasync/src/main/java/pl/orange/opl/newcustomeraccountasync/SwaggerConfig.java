@@ -1,4 +1,4 @@
-package com.example.newcustomercontractasync;
+package pl.orange.opl.newcustomeraccountasync;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

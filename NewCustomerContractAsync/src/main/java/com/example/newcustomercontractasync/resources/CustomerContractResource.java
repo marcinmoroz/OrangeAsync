@@ -1,6 +1,5 @@
 package com.example.newcustomercontractasync.resources;
 
-import com.example.newcustomercontractasync.services.CustomerAccounts;
 import com.example.newcustomercontractasync.services.CustomerContractService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
