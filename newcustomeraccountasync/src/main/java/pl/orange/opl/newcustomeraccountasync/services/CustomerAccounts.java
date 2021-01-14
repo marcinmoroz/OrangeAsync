@@ -1,5 +1,6 @@
 package pl.orange.opl.newcustomeraccountasync.services;
 
+import com.moro.test.commons.clients.CustomerContractsService;
 import com.moro.test.commons.models.Account;
 import com.moro.test.commons.models.Contract;
 import io.opentracing.Span;
@@ -23,18 +24,21 @@ import java.util.stream.Collectors;
 public class CustomerAccounts {
     @Autowired
     private Tracer tracer;
+    @Autowired
+    CustomerContractsService customerContractsService;
     private Integer waitTimeMilliseconds = 50;
 
     public CompletableFuture<List<Account>> getCustomerAccounts() throws InterruptedException {
-        Span span = tracer.buildSpan("CustomerAccountsService-getCustomerAccounts")
+        Span span = tracer.buildSpan("CustomerAccountsService-getCustomerAccounts-customSpan")
                 .start();
         tracer.activateSpan(span);
         span.context().baggageItems().forEach(bI -> log.info("CustomerAccountsService : " +bI.getKey() + "||"+bI.getValue()));
 
+        var contracts = customerContractsService.getCustomerContracts();
         TimeUnit.MILLISECONDS.sleep(waitTimeMilliseconds);
-        Contract contract1 = Contract.builder().id(1).number("Contract1").build();
         Account account1 = Account.builder().id(1).number("Account1").build();
-        account1.setContracts( new ArrayList<Contract>(){{add(contract1);}});
+        account1.setContracts( contracts.stream().map( c-> Contract.builder().number(c).id(contracts.indexOf(c))
+                .build()).collect(Collectors.toList()));
         var accounts = new ArrayList<Account>(){{add(account1);}};
         span.finish();
         return CompletableFuture.completedFuture(accounts);

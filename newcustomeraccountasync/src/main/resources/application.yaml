@@ -8,3 +8,10 @@ server.tomcat.max-threads: 20
 
 opentracing.jaeger.http-sender.url : http://localhost:14268/api/traces
 opentracing.jaeger.log-spans : true
+
+CustomerAccounts.feign :
+  name : CustomerAccounts
+  url : http://localhost:8094/CustomerAccounts
+CustomerContracts.feign :
+  name : CustomerContracts
+  url : http://localhost:8093/CustomerContracts
