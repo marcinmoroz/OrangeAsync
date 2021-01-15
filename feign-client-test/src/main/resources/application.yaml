@@ -1,9 +1,14 @@
-spring.application.name: feignclient
+spring.application.name: testClient
   #spring.cloud.loadbalancer.ribbon.enabled=false
   #CustomerContracts.ribbon.listOfServers=localhost:8093
   #ribbon.eureka.enabled=false
 opentracing.jaeger.http-sender.url : http://localhost:14268/api/traces
-opentracing.jaeger.log-spans : true
+opentracing.jaeger.log-spans : false
+opentracing:
+  spring:
+    cloud:
+      log:
+        enabled: false
 
 CustomerAccounts.feign :
   name : CustomerAccounts

@@ -5,9 +5,32 @@ server:
 spring.application.name: CustomerAccountsAsync
 server.tomcat.max-threads: 20
 
+management:
+  endpoint:
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+
+
+
 
 opentracing.jaeger.http-sender.url : http://localhost:14268/api/traces
-opentracing.jaeger.log-spans : true
+opentracing.jaeger.log-spans : false
+opentracing:
+  spring:
+    cloud:
+      log:
+        enabled: false
 
 CustomerAccounts.feign :
   name : CustomerAccounts
