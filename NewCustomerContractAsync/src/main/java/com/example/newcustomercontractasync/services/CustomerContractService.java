@@ -1,5 +1,6 @@
 package com.example.newcustomercontractasync.services;
 
+import com.example.newcustomercontractasync.mongo.ContractRepository;
 import lombok.var;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -9,19 +10,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Async("contractsExecutor")
 @Service
 public class CustomerContractService {
     private Integer waitTimeMilliseconds = 1000;
+    final ContractRepository contractRepository;
+
+    public CustomerContractService(ContractRepository contractRepository) {
+        this.contractRepository = contractRepository;
+    }
 
     public CompletableFuture<List<String>> getCustomerContracts() throws InterruptedException {
         TimeUnit.MILLISECONDS.sleep(waitTimeMilliseconds);
+        var contractsFromMongo = contractRepository.findAll();
         var contracts = new ArrayList<String>() {{
             add("Contract1");
             add("Contract2");
             add("Contract3");
         }};
+        contracts.addAll(contractsFromMongo.stream().map( c -> c.getContracNumber()).collect(Collectors.toList()));
         return CompletableFuture.completedFuture(contracts);
     }
 
