@@ -84,28 +84,31 @@ public class FeignClientTestApplication  implements CommandLineRunner {
         for (int i = 0; i < args.length; ++i) {
             log.info("args[{}]: {}", i, args[i]);
         }
-        Span span = tracer.buildSpan("localSpan")
-                .start();
-        tracer.activateSpan(span);
-        span.log("Start");
-        span.setTag("NotGlobalID",UUID.randomUUID().toString());
-        span.setBaggageItem("GlobalId", UUID.randomUUID().toString());
-        try {
-            log.info("Baggage items");
-            span.context().baggageItems().forEach(bI -> log.info(bI.getKey() + "||"+bI.getValue()));
-            List<Account> accounts = restTemplate.exchange("http://localhost:8094/CustomerAccounts/accounts/getCustomerAcounts", HttpMethod.GET, null,
-                    new ParameterizedTypeReference<List<Account>>(){}).getBody();
-            accounts.forEach( a -> log.info("Account : " + a.toString()));
-            String response = customerClient.getCustomerAccountNumber();
-            log.info("Response :{}", response);
-            accounts = customerClient.getCustomerAccounts();
-            accounts.forEach( a -> log.info("Account : " + a.toString()));
-            var contracts = customerContractsService.getCustomerContracts();
-        } catch (Exception e) {
-            log.error(e);
-        }
-        finally {
-            span.finish();
+        while(true) {
+            Span span = tracer.buildSpan("localSpan")
+                    .start();
+            tracer.activateSpan(span);
+            span.log("Start");
+            span.setTag("NotGlobalID", UUID.randomUUID().toString());
+            span.setBaggageItem("GlobalId", UUID.randomUUID().toString());
+            try {
+                log.info("Baggage items");
+                span.context().baggageItems().forEach(bI -> log.info(bI.getKey() + "||" + bI.getValue()));
+                List<Account> accounts = restTemplate.exchange("http://localhost:8094/CustomerAccounts/accounts/getCustomerAcounts", HttpMethod.GET, null,
+                        new ParameterizedTypeReference<List<Account>>() {
+                        }).getBody();
+                accounts.forEach(a -> log.info("Account : " + a.toString()));
+                String response = customerClient.getCustomerAccountNumber();
+                log.info("Response :{}", response);
+                accounts = customerClient.getCustomerAccounts();
+                accounts.forEach(a -> log.info("Account : " + a.toString()));
+                var contracts = customerContractsService.getCustomerContracts();
+            } catch (Exception e) {
+                log.error(e);
+            } finally {
+                span.finish();
+            }
+            Thread.sleep(1000);
         }
     }
 }
