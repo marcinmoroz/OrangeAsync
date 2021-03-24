@@ -8,7 +8,6 @@ import feign.Util;
 import io.opentracing.Tracer;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StopWatch;
 
 import java.io.IOException;
 
@@ -41,20 +40,20 @@ public class OccFeignLogger extends Logger {
                         : "";
         int status = response.status();
         int bodyLength = 0;
-        // HTTP 204 No Content "...response MUST NOT include a message-body"
-        // HTTP 205 Reset Content "...response MUST NOT include an entity"
-        RequestLog requestLog = new RequestLog();
+        OutgoingRequestLog outgoingRequestLog = new OutgoingRequestLog();
         Request request = response.request();
         String requestBody = request.toString();
         String requestBodyText =  request.charset() != null ? new String(request.body(), request.charset()) : null;
-        requestLog.request = requestBodyText;
-        requestLog.uri = request.url();
-        requestLog.elapsedTime = elapsedTime;
-        requestLog.status = status;
-        requestLog.reason = reason;
+        outgoingRequestLog.request = requestBodyText;
+        outgoingRequestLog.uri = request.url();
+        outgoingRequestLog.elapsedTime = elapsedTime;
+        outgoingRequestLog.status = status;
+        outgoingRequestLog.reason = reason;
         request.headers().forEach((header, headerValues) -> {
-            requestLog.requestHeaders.put(header, headerValues);
+            outgoingRequestLog.requestHeaders.put(header, headerValues);
         });
+        // HTTP 204 No Content "...response MUST NOT include a message-body"
+        // HTTP 205 Reset Content "...response MUST NOT include an entity"
         if (response.body() != null && !(status == 204 || status == 205)) {
             byte[] bodyData = Util.toByteArray(response.body().asInputStream());
             bodyLength = bodyData.length;
@@ -63,13 +62,13 @@ public class OccFeignLogger extends Logger {
                 responseBody = Util.decodeOrDefault(bodyData, Util.UTF_8, "Binary data");
             }
             response.headers().forEach((header, headerValues) -> {
-                requestLog.responseHeaders.put(header, headerValues);
+                outgoingRequestLog.responseHeaders.put(header, headerValues);
             });
-            requestLog.response = responseBody;
+            outgoingRequestLog.response = responseBody;
             response = response.toBuilder().body(bodyData).build();
         }
         ObjectMapper mapper = new ObjectMapper();
-        log.info(mapper.writeValueAsString(requestLog));
+        log.info(mapper.writeValueAsString(outgoingRequestLog));
         return response;
     }
 
