@@ -1,5 +1,6 @@
 package com.moro.test.feignclienttest.tools;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Logger;
 import feign.Request;
 import feign.Response;
@@ -13,7 +14,6 @@ import java.io.IOException;
 
 @Log4j2
 public class OccFeignLogger extends Logger {
-    StopWatch requestWatcher;
     @Autowired
     private Tracer tracer;
 
@@ -24,8 +24,7 @@ public class OccFeignLogger extends Logger {
 
     @Override
     protected void logRequest(String configKey, Level logLevel, Request request) {
-        requestWatcher = new StopWatch();
-        requestWatcher.start();
+        log.info("logRequest Config key : " + configKey);
         String requestBody = request.toString();
         log.info("Request start");
         log.info("Request : " + requestBody);
@@ -38,43 +37,45 @@ public class OccFeignLogger extends Logger {
 
     @Override
     protected Response logAndRebufferResponse(String configKey, Level logLevel, Response response, long elapsedTime) throws IOException {
-        if(requestWatcher != null) {
-            requestWatcher.stop();
-        }
-        log.info("Time : " + requestWatcher.getTotalTimeSeconds());
-        if (response.body() != null) {
-            String result="";
+        String reason = response.reason() != null && logLevel.compareTo(Level.NONE) > 0 ? " " + response.reason()
+                        : "";
+        int status = response.status();
+        int bodyLength = 0;
+        // HTTP 204 No Content "...response MUST NOT include a message-body"
+        // HTTP 205 Reset Content "...response MUST NOT include an entity"
+        RequestLog requestLog = new RequestLog();
+        Request request = response.request();
+        String requestBody = request.toString();
+        String requestBodyText =  request.charset() != null ? new String(request.body(), request.charset()) : null;
+        requestLog.request = requestBodyText;
+        requestLog.uri = request.url();
+        requestLog.elapsedTime = elapsedTime;
+        requestLog.status = status;
+        requestLog.reason = reason;
+        request.headers().forEach((header, headerValues) -> {
+            requestLog.requestHeaders.put(header, headerValues);
+        });
+        if (response.body() != null && !(status == 204 || status == 205)) {
             byte[] bodyData = Util.toByteArray(response.body().asInputStream());
-            int bodyLength = bodyData.length;
+            bodyLength = bodyData.length;
+            String responseBody="";
             if (bodyLength > 0) {
-                result = Util.decodeOrDefault(bodyData, Util.UTF_8, "Binary data");
+                responseBody = Util.decodeOrDefault(bodyData, Util.UTF_8, "Binary data");
             }
-            Response build = response.toBuilder().body(bodyData).build();
-            Request request = build.request();
-            String requestBody = request.toString();
-            String bodyText =  request.charset() != null ? new String(request.body(), request.charset()) : null;
-            //log.info("B" + bodyText);
-            log.info("Request : " + requestBody);
-            log.info("List of requestheaders" );
-            request.headers().forEach((s, strings) -> {
-                log.info("Header : " + s);
-                log.info(String.join(";",strings));
+            response.headers().forEach((header, headerValues) -> {
+                requestLog.responseHeaders.put(header, headerValues);
             });
-            // request URL request.url()
-            // request parameter bodyText
-            // request result
-            // request time elapsedTime
-            //logger.info();
-            return build;
+            requestLog.response = responseBody;
+            response = response.toBuilder().body(bodyData).build();
         }
+        ObjectMapper mapper = new ObjectMapper();
+        log.info(mapper.writeValueAsString(requestLog));
         return response;
     }
 
     @Override
     protected IOException logIOException(String configKey, Level logLevel, IOException ioe, long elapsedTime) {
-        if(requestWatcher != null) {
-            requestWatcher.stop();
-        }
+        log.info("logIOException Config key : " + configKey);
         return super.logIOException(configKey, logLevel, ioe, elapsedTime);
     }
 }
