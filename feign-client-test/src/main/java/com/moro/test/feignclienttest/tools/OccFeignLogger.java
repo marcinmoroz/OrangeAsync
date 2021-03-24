@@ -46,7 +46,7 @@ public class OccFeignLogger extends Logger {
         String requestBodyText =  request.charset() != null ? new String(request.body(), request.charset()) : null;
         outgoingRequestLog.request = requestBodyText;
         outgoingRequestLog.uri = request.url();
-        outgoingRequestLog.elapsedTime = elapsedTime;
+        outgoingRequestLog.elapsedTimeMs = elapsedTime;
         outgoingRequestLog.status = status;
         outgoingRequestLog.reason = reason;
         request.headers().forEach((header, headerValues) -> {

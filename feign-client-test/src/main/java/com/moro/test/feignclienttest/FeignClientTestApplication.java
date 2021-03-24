@@ -1,9 +1,7 @@
 package com.moro.test.feignclienttest;
 
 import com.moro.test.commons.clients.CustomerContractsService;
-import com.moro.test.commons.models.Account;
 import com.moro.test.feignclienttest.tools.OccFeignLogger;
-import feign.Feign;
 import feign.Logger;
 import feign.RequestInterceptor;
 import io.opentracing.Span;
@@ -11,24 +9,19 @@ import io.opentracing.Tracer;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import lombok.var;
+import okhttp3.OkHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.openfeign.EnableFeignClients;
-import org.springframework.cloud.openfeign.support.SpringMvcContract;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
 import com.moro.test.commons.clients.CustomerAccountsService;
-
 import java.time.Instant;
-import java.util.List;
 import java.util.UUID;
 
 @EnableFeignClients("com.moro.test.commons.clients")
@@ -60,6 +53,11 @@ public class FeignClientTestApplication  implements CommandLineRunner {
                 requestTemplate.header("systemName", "feignClient");
                 requestTemplate.header("time", Instant.now().toString());
             };
+        }
+
+        @Bean
+        public OkHttpClient client() {
+            return new OkHttpClient();
         }
     }
 
