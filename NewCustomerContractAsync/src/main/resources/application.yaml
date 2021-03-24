@@ -20,6 +20,10 @@ management:
       exposure:
         include: "*"
 
+feign:
+  metrics:
+    enabled: true
+
 opentracing.jaeger.http-sender.url : http://localhost:14268/api/traces
 opentracing.jaeger.log-spans : false
 opentracing:

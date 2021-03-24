@@ -3,6 +3,8 @@ package com.example.newcustomercontractasync;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
+import feign.micrometer.MicrometerCapability;
+import io.micrometer.core.instrument.MeterRegistry;
 import io.opentracing.Tracer;
 import io.opentracing.contrib.mongo.common.TracingCommandListener;
 import lombok.extern.log4j.Log4j2;
@@ -30,6 +32,11 @@ import java.util.concurrent.Executor;
 public class NewcustomercontractasyncApplication {
     @Autowired
     private Tracer tracer;
+
+    @Bean
+    public MicrometerCapability micrometerCapability(MeterRegistry meterRegistry) {
+        return new MicrometerCapability(meterRegistry);
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(NewcustomercontractasyncApplication.class, args);

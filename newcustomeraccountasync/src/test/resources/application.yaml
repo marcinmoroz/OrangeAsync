@@ -22,15 +22,10 @@ management:
         include: "*"
 
 
+
 feign:
   metrics:
     enabled: true
-
-spring:
-  cloud:
-    loadbalancer:
-      ribbon:
-        enabled: false
 
 opentracing.jaeger.http-sender.url : http://localhost:14268/api/traces
 opentracing.jaeger.log-spans : false

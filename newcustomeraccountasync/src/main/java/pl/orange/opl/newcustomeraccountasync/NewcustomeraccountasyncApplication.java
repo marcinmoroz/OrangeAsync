@@ -1,5 +1,7 @@
 package pl.orange.opl.newcustomeraccountasync;
 
+import feign.micrometer.MicrometerCapability;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -16,6 +18,11 @@ public class NewcustomeraccountasyncApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(NewcustomeraccountasyncApplication.class, args);
+    }
+
+    @Bean
+    public MicrometerCapability micrometerCapability(MeterRegistry meterRegistry) {
+        return new MicrometerCapability(meterRegistry);
     }
 
     @Bean
