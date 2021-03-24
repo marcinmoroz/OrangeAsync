@@ -21,6 +21,7 @@ import org.springframework.cloud.openfeign.support.SpringMvcContract;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
@@ -48,6 +49,7 @@ public class FeignClientTestApplication  implements CommandLineRunner {
         }
 
         @Bean
+        @Scope("prototype")
         Logger feignLogger() {
             return new OccFeignLogger();
         }
@@ -80,6 +82,7 @@ public class FeignClientTestApplication  implements CommandLineRunner {
     @SneakyThrows
     @Override
     public void run(String... args) {
+
         log.info("EXECUTING : command line runner");
         for (int i = 0; i < args.length; ++i) {
             log.info("args[{}]: {}", i, args[i]);
@@ -94,13 +97,13 @@ public class FeignClientTestApplication  implements CommandLineRunner {
             try {
                 log.info("Baggage items");
                 span.context().baggageItems().forEach(bI -> log.info(bI.getKey() + "||" + bI.getValue()));
-                List<Account> accounts = restTemplate.exchange("http://localhost:8094/CustomerAccounts/accounts/getCustomerAcounts", HttpMethod.GET, null,
-                        new ParameterizedTypeReference<List<Account>>() {
-                        }).getBody();
-                accounts.forEach(a -> log.info("Account : " + a.toString()));
+//                List<Account> accounts = restTemplate.exchange("http://localhost:8094/CustomerAccounts/accounts/getCustomerAcounts", HttpMethod.GET, null,
+//                        new ParameterizedTypeReference<List<Account>>() {
+//                        }).getBody();
+//                accounts.forEach(a -> log.info("Account : " + a.toString()));
                 String response = customerClient.getCustomerAccountNumber();
                 log.info("Response :{}", response);
-                accounts = customerClient.getCustomerAccounts();
+                var accounts = customerClient.getCustomerAccounts();
                 accounts.forEach(a -> log.info("Account : " + a.toString()));
                 var contracts = customerContractsService.getCustomerContracts();
             } catch (Exception e) {
