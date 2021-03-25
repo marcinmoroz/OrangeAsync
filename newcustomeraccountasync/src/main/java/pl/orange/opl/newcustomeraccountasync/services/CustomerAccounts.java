@@ -3,11 +3,18 @@ package pl.orange.opl.newcustomeraccountasync.services;
 import com.moro.test.commons.clients.CustomerContractsService;
 import com.moro.test.commons.models.Account;
 import com.moro.test.commons.models.Contract;
+import feign.Client;
+import feign.Feign;
+import feign.codec.Decoder;
+import feign.codec.Encoder;
+import feign.micrometer.MicrometerCapability;
+import io.micrometer.core.instrument.MeterRegistry;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
 import lombok.extern.log4j.Log4j2;
 import lombok.var;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,9 +31,20 @@ import java.util.stream.Collectors;
 public class CustomerAccounts {
     @Autowired
     private Tracer tracer;
-    @Autowired
+    //@Autowired
     CustomerContractsService customerContractsService;
     private Integer waitTimeMilliseconds = 50;
+
+    @Autowired
+    public CustomerAccounts(Decoder decoder, Encoder encoder, Client client, feign.Contract contract,
+                            MeterRegistry meterRegistry, @Value("${CustomerContracts.feign.url}") String contractsUrl) {
+      customerContractsService = Feign.builder().client(client)
+              .encoder(encoder)
+              .decoder(decoder)
+              .contract(contract)
+              .addCapability(new MicrometerCapability(meterRegistry))
+              .target(CustomerContractsService.class, contractsUrl);
+    }
 
     public CompletableFuture<List<Account>> getCustomerAccounts() throws InterruptedException {
         Span span = tracer.buildSpan("CustomerAccountsService-getCustomerAccounts-customSpan")

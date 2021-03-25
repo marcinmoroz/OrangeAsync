@@ -6,12 +6,15 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.cloud.openfeign.FeignClientsConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.concurrent.Executor;
 
+@Import(FeignClientsConfiguration.class)
 @EnableFeignClients("com.moro.test.commons.clients")
 @SpringBootApplication
 public class NewcustomeraccountasyncApplication {

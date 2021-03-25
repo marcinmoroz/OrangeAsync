@@ -25,6 +25,14 @@ management:
 feign:
   metrics:
     enabled: true
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: basic
+        capabilities:
+          - feign.micrometer.MicrometerCapability
 
 
 opentracing.jaeger.http-sender.url : http://localhost:14268/api/traces
