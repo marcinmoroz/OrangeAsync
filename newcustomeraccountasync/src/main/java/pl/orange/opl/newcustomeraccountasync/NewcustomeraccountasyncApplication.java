@@ -8,6 +8,7 @@ import feign.micrometer.*;
 import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -19,6 +20,7 @@ import org.springframework.cloud.openfeign.support.SpringEncoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.env.Environment;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.client.RestTemplate;
 
@@ -34,6 +36,23 @@ public class NewcustomeraccountasyncApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(NewcustomeraccountasyncApplication.class, args);
+    }
+
+    @Configuration
+    class PrometheusConfiguration {
+        private final Environment environment;
+
+        public PrometheusConfiguration(Environment environment) {
+            this.environment = environment;
+        }
+
+        @Bean
+        MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
+            return registry -> {
+              registry.config().commonTags("systemName", environment.getProperty("spring.application.name"));
+              registry.config().commonTags("instanceName", "instance1") ;
+            };
+        }
     }
 
     @Configuration
