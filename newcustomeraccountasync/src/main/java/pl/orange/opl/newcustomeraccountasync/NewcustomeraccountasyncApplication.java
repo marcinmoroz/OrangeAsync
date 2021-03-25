@@ -6,9 +6,12 @@ import feign.codec.Decoder;
 import feign.codec.Encoder;
 import feign.micrometer.*;
 import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Tag;
+import io.micrometer.core.instrument.Tags;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
+import org.springframework.boot.actuate.metrics.web.servlet.WebMvcTagsContributor;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -26,7 +29,10 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSocketFactory;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.concurrent.Executor;
 
 @Import(FeignClientsConfiguration.class)
@@ -51,6 +57,21 @@ public class NewcustomeraccountasyncApplication {
             return registry -> {
               registry.config().commonTags("systemName", environment.getProperty("spring.application.name"));
               registry.config().commonTags("instanceName", "instance1") ;
+            };
+        }
+
+        @Bean
+        public WebMvcTagsContributor webMvcTagsContributor() {
+            return new WebMvcTagsContributor() {
+                @Override
+                public Iterable<Tag> getTags(HttpServletRequest request, HttpServletResponse response, Object handler, Throwable exception) {
+                    return Tags.of(Tag.of("opl-httpStatus", String.valueOf(response.getStatus())));
+                }
+
+                @Override
+                public Iterable<Tag> getLongRequestTags(HttpServletRequest request, Object handler) {
+                    return new ArrayList<>();
+                }
             };
         }
     }
