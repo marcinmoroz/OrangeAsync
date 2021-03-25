@@ -31,20 +31,9 @@ import java.util.stream.Collectors;
 public class CustomerAccounts {
     @Autowired
     private Tracer tracer;
-    //@Autowired
+    @Autowired
     CustomerContractsService customerContractsService;
     private Integer waitTimeMilliseconds = 50;
-
-    @Autowired
-    public CustomerAccounts(Decoder decoder, Encoder encoder, Client client, feign.Contract contract,
-                            MeterRegistry meterRegistry, @Value("${CustomerContracts.feign.url}") String contractsUrl) {
-      customerContractsService = Feign.builder().client(client)
-              .encoder(encoder)
-              .decoder(decoder)
-              .contract(contract)
-              .addCapability(new MicrometerCapability(meterRegistry))
-              .target(CustomerContractsService.class, contractsUrl);
-    }
 
     public CompletableFuture<List<Account>> getCustomerAccounts() throws InterruptedException {
         Span span = tracer.buildSpan("CustomerAccountsService-getCustomerAccounts-customSpan")
