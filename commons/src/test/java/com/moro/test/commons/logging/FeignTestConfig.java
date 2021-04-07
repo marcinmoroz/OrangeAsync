@@ -4,10 +4,9 @@ import feign.Logger;
 import feign.RequestInterceptor;
 import okhttp3.OkHttpClient;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
-import org.springframework.cloud.netflix.ribbon.RibbonAutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.openfeign.FeignAutoConfiguration;
-import org.springframework.cloud.openfeign.ribbon.FeignRibbonClientAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,7 +14,8 @@ import java.time.Instant;
 
 //@SpringBootApplication
 @Configuration
-@ImportAutoConfiguration({RibbonAutoConfiguration.class, FeignRibbonClientAutoConfiguration.class, FeignAutoConfiguration.class})
+@EnableConfigurationProperties
+@ImportAutoConfiguration({ FeignAutoConfiguration.class})
 @EnableFeignClients(clients = FeignTestClient.class)
 public class FeignTestConfig  {
     @Bean
