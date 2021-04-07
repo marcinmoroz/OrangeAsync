@@ -1,0 +1,6 @@
+CustomerAccounts.feign :
+  name : CustomerAccounts
+  url : http://localhost:8094/CustomerAccounts
+CustomerContracts.feign :
+  name : CustomerContracts
+  url : http://localhost:8093/CustomerContracts

@@ -1,4 +1,4 @@
-package com.moro.test.feignclienttest.tools;
+package com.moro.test.commons.logging;
 
 import lombok.Data;
 import java.io.IOException;

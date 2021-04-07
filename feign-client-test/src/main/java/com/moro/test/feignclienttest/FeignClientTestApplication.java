@@ -1,7 +1,7 @@
 package com.moro.test.feignclienttest;
 
 import com.moro.test.commons.clients.CustomerContractsService;
-import com.moro.test.feignclienttest.tools.OccFeignLogger;
+import com.moro.test.commons.logging.OccFeignLogger;
 import feign.Logger;
 import feign.RequestInterceptor;
 import io.opentracing.Span;
@@ -13,6 +13,7 @@ import okhttp3.OkHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.openfeign.EnableFeignClients;
@@ -25,6 +26,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 @EnableFeignClients("com.moro.test.commons.clients")
+
 @SpringBootApplication
 @Log4j2
 public class FeignClientTestApplication  implements CommandLineRunner {

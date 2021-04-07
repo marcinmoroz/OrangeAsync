@@ -1,20 +1,17 @@
-package com.moro.test.feignclienttest.tools;
+package com.moro.test.commons.logging;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Logger;
 import feign.Request;
 import feign.Response;
 import feign.Util;
-import io.opentracing.Tracer;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 
 @Log4j2
 public class OccFeignLogger extends Logger {
-    @Autowired
-    private Tracer tracer;
+
 
     @Override
     protected void log(String s, String s1, Object... objects) {
@@ -23,15 +20,16 @@ public class OccFeignLogger extends Logger {
 
     @Override
     protected void logRequest(String configKey, Level logLevel, Request request) {
-        log.info("logRequest Config key : " + configKey);
-        String requestBody = request.toString();
-        log.info("Request start");
-        log.info("Request : " + requestBody);
-        log.info("Headers" + request.headers());
-        request.headers().forEach((s, strings) -> {
-            log.info("Header : " + s);
-            log.info(String.join(";",strings));
-        });
+        super.logRequest(configKey, logLevel, request);
+//        log.info("logRequest Config key : " + configKey);
+//        String requestBody = request.toString();
+//        log.info("Request start");
+//        log.info("Request : " + requestBody);
+//        log.info("Headers" + request.headers());
+//        request.headers().forEach((s, strings) -> {
+//            log.info("Header : " + s);
+//            log.info(String.join(";",strings));
+//        });
     }
 
     @Override
@@ -74,7 +72,7 @@ public class OccFeignLogger extends Logger {
 
     @Override
     protected IOException logIOException(String configKey, Level logLevel, IOException ioe, long elapsedTime) {
-        log.info("logIOException Config key : " + configKey);
+        //log.info("logIOException Config key : " + configKey);
         return super.logIOException(configKey, logLevel, ioe, elapsedTime);
     }
 }
