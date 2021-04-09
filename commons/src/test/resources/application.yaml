@@ -1,2 +1,2 @@
 testclient:
-  url: http://localhost:8093/CustomerContracts
+  url: http://localhost:9561

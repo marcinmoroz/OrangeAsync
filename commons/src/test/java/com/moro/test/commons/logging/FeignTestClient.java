@@ -5,6 +5,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @FeignClient(name = "test-client", url="${testclient.url}")
 public interface FeignTestClient {
-    @RequestMapping(value = "hello")
-    String hello();
+    @RequestMapping(value = "/test")
+    String test();
 }
