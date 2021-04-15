@@ -28,10 +28,8 @@ public class OccFeignLoggerTest {
         mockService.stubFor(WireMock.get(WireMock.urlEqualTo("/test")).willReturn(
                     WireMock.aResponse().withBody(expectedResponse)
                 ));
-
         //        When
         String testResult = client.test();
-
         //        Then
         assertNotNull(expectedResponse);
         List<String> logs = logCaptor.getLogs();
