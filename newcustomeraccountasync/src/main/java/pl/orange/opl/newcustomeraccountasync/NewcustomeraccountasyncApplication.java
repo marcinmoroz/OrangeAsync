@@ -8,7 +8,7 @@ import feign.micrometer.*;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tag;
 import io.micrometer.core.instrument.Tags;
-import org.springframework.beans.factory.ObjectFactory;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCustomizer;
 import org.springframework.boot.actuate.metrics.web.servlet.WebMvcTagsContributor;
@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.concurrent.Executor;
 
 @Import(FeignClientsConfiguration.class)
-@EnableFeignClients("com.moro.test.commons.clients")
+@EnableFeignClients("com.moro.commons.clients")
 @SpringBootApplication
 public class NewcustomeraccountasyncApplication {
 
