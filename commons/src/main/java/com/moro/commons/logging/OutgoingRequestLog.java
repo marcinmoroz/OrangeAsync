@@ -1,4 +1,4 @@
-package com.moro.test.commons.logging;
+package com.moro.commons.logging;
 
 import lombok.Data;
 import java.io.IOException;

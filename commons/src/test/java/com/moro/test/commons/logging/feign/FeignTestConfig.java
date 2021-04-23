@@ -1,6 +1,10 @@
-package com.moro.test.commons.logging;
+package com.moro.test.commons.logging.feign;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
+import com.moro.commons.context.http.ApplicationHttpContext;
+import com.moro.commons.context.http.feign.FeignRequestInterceptor;
+import com.moro.commons.logging.OccFeignLogger;
+import com.moro.test.commons.logging.TestHttpContext;
 import feign.Logger;
 import feign.RequestInterceptor;
 import okhttp3.OkHttpClient;
@@ -12,6 +16,9 @@ import org.springframework.cloud.openfeign.FeignAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import java.time.Instant;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 //@SpringBootApplication
 @Configuration
@@ -25,16 +32,20 @@ public class FeignTestConfig  {
     }
 
     @Bean
+    ApplicationHttpContext testContext() {return new TestHttpContext();}
+
+    @Bean
     Logger.Level feignLoggerLevel() {
         return Logger.Level.FULL;
     }
 
     @Bean
     public RequestInterceptor requestInterceptor() {
-        return requestTemplate -> {
-            requestTemplate.header("systemName", "feignClient");
-            requestTemplate.header("time", Instant.now().toString());
-        };
+        return new FeignRequestInterceptor(Stream.of(testContext()).collect(Collectors.toList()));
+//        return requestTemplate -> {
+//            requestTemplate.header("systemName", "feignClient");
+//            requestTemplate.header("time", Instant.now().toString());
+//        };
     }
 
     @Bean

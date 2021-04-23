@@ -8,6 +8,9 @@ import com.mongodb.client.MongoClient;
 import io.opentracing.Tracer;
 import io.opentracing.contrib.mongo.common.TracingCommandListener;
 
+/**
+ * Creates mongo client with tracing capabilities
+ */
 @Component
 public class TracedMongoClient {
     public MongoClient createTracedMongoClient(Tracer tracer, String mongoUri) {

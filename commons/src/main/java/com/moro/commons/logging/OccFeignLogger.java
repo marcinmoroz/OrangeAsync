@@ -1,4 +1,4 @@
-package com.moro.test.commons.logging;
+package com.moro.commons.logging;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Logger;
@@ -11,8 +11,6 @@ import java.io.IOException;
 
 @Log4j2
 public class OccFeignLogger extends Logger {
-
-
     @Override
     protected void log(String s, String s1, Object... objects) {
 
@@ -21,15 +19,6 @@ public class OccFeignLogger extends Logger {
     @Override
     protected void logRequest(String configKey, Level logLevel, Request request) {
         super.logRequest(configKey, logLevel, request);
-//        log.info("logRequest Config key : " + configKey);
-//        String requestBody = request.toString();
-//        log.info("Request start");
-//        log.info("Request : " + requestBody);
-//        log.info("Headers" + request.headers());
-//        request.headers().forEach((s, strings) -> {
-//            log.info("Header : " + s);
-//            log.info(String.join(";",strings));
-//        });
     }
 
     @Override
