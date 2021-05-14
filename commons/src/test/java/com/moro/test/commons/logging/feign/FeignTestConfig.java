@@ -15,12 +15,9 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.openfeign.FeignAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import java.time.Instant;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-//@SpringBootApplication
 @Configuration
 @EnableConfigurationProperties
 @ImportAutoConfiguration({ FeignAutoConfiguration.class, HttpMessageConvertersAutoConfiguration.class})
@@ -42,10 +39,6 @@ public class FeignTestConfig  {
     @Bean
     public RequestInterceptor requestInterceptor() {
         return new FeignRequestInterceptor(Stream.of(testContext()).collect(Collectors.toList()));
-//        return requestTemplate -> {
-//            requestTemplate.header("systemName", "feignClient");
-//            requestTemplate.header("time", Instant.now().toString());
-//        };
     }
 
     @Bean

@@ -1,5 +1,6 @@
 package com.moro.commons.monitoring.mongo;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import com.mongodb.client.MongoClients;
 import com.mongodb.ConnectionString;
@@ -12,8 +13,11 @@ import io.opentracing.contrib.mongo.common.TracingCommandListener;
  * Creates mongo client with tracing capabilities
  */
 @Component
+@AllArgsConstructor
 public class TracedMongoClient {
-    public MongoClient createTracedMongoClient(Tracer tracer, String mongoUri) {
+    Tracer tracer;
+
+    public MongoClient createTracedMongoClient( String mongoUri) {
         ConnectionString connectionString = new ConnectionString(mongoUri);
         // Instantiate TracingCommandListener
         TracingCommandListener listener = new TracingCommandListener.Builder(tracer).build();

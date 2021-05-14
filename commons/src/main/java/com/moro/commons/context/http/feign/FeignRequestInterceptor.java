@@ -7,9 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.StringUtils;
 
 import org.springframework.stereotype.Component;
-
 import java.util.List;
-import java.util.Map;
 
 /**
  * Passes
