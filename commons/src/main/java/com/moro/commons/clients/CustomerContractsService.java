@@ -1,11 +1,8 @@
-package com.moro.test.commons.clients;
+package com.moro.commons.clients;
 
-import com.moro.test.commons.models.Account;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 

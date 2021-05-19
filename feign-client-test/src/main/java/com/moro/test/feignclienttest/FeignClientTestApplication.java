@@ -1,8 +1,8 @@
 package com.moro.test.feignclienttest;
 
-import com.moro.test.commons.clients.CustomerAccountsService;
-import com.moro.test.commons.clients.CustomerContractsService;
-import com.moro.test.commons.logging.OccFeignLogger;
+import com.moro.commons.clients.CustomerAccountsService;
+import com.moro.commons.clients.CustomerContractsService;
+import com.moro.commons.logging.OccFeignLogger;
 import feign.Logger;
 import feign.RequestInterceptor;
 import io.opentracing.Span;
@@ -24,7 +24,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.Instant;
 import java.util.UUID;
 
-@EnableFeignClients("com.moro.test.commons.clients")
+@EnableFeignClients("com.moro.commons.clients")
 @SpringBootApplication
 @Log4j2
 public class FeignClientTestApplication  implements CommandLineRunner {

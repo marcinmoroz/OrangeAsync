@@ -1,4 +1,4 @@
-package com.moro.test.commons.models;
+package com.moro.commons.models;
 
 import lombok.Builder;
 import lombok.Data;

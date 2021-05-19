@@ -1,6 +1,6 @@
 package pl.orange.opl.newcustomeraccountasync.resources;
 
-import com.moro.test.commons.models.Account;
+import com.moro.commons.models.Account;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
 import lombok.extern.log4j.Log4j2;

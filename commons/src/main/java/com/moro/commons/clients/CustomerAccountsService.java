@@ -1,6 +1,6 @@
-package com.moro.test.commons.clients;
+package com.moro.commons.clients;
 
-import com.moro.test.commons.models.Account;
+import com.moro.commons.models.Account;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 
