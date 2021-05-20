@@ -6,6 +6,12 @@
                     pattern="%style{%d{ISO8601}}{black} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%C{10}}{bright,yellow}: %msg%n%throwable" />
         </Console>
 
+        <Console name="ConsoleJSONAppender" target="SYSTEM_OUT">
+            <JsonLayout complete="false" compact="true">
+                <KeyValuePair key="myCustomField" value="feign-client-test" />
+            </JsonLayout>
+        </Console>
+
         <RollingFile name="RollingFile"
                      fileName="./logs/spring-boot-logger-log4j2.log"
                      filePattern="./logs/$${date:yyyy-MM}/spring-boot-logger-log4j2-%d{-dd-MMMM-yyyy}-%i.log.gz">
@@ -26,11 +32,11 @@
     <Loggers>
         <!-- LOG everything at INFO level -->
         <Logger name="com.moro" level="trace">
-            <AppenderRef ref="Console" />
+<!--            <AppenderRef ref="Console" />-->
             <AppenderRef ref="RollingFile" />
         </Logger>
         <Root level="info">
-            <AppenderRef ref="Console" />
+            <AppenderRef ref="ConsoleJSONAppender" />
         </Root>
 
     </Loggers>
