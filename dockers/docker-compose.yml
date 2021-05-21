@@ -5,7 +5,7 @@ services:
     image: mongo
     ports:
       - 27017:27017
-
+              
   grafana:
     image: grafana/grafana
     ports:
