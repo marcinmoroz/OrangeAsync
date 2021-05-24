@@ -1,12 +1,16 @@
 package com.moro.commons.monitoring.prometheus;
 
+import com.moro.commons.context.monitoring.PrometheusTagsProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tag;
@@ -15,19 +19,22 @@ import org.springframework.boot.actuate.autoconfigure.metrics.MeterRegistryCusto
 import org.springframework.boot.actuate.metrics.web.servlet.WebMvcTagsContributor;
 
 
+@RequiredArgsConstructor
 @Configuration
 public class OccPrometheusConfiguration {
     private final Environment environment;
-
-    public OccPrometheusConfiguration(Environment environment) {
-        this.environment = environment;
-    }
+    private final List<PrometheusTagsProvider> tagsProviders;
 
     @Bean
     MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
         return registry -> {
-            registry.config().commonTags("systemName", environment.getProperty("spring.application.name"));
-            registry.config().commonTags("instanceName", "instance1") ;
+            if(tagsProviders != null) {
+                tagsProviders.forEach( tP -> {
+                    tP.getStaticTags().forEach( (k,v) -> registry.config().commonTags(k,v));
+                });
+            }
+//            registry.config().commonTags("systemName", environment.getProperty("spring.application.name"));
+//            registry.config().commonTags("instanceName", "instance1") ;
         };
     }
 
@@ -36,7 +43,16 @@ public class OccPrometheusConfiguration {
         return new WebMvcTagsContributor() {
             @Override
             public Iterable<Tag> getTags(HttpServletRequest request, HttpServletResponse response, Object handler, Throwable exception) {
-                return Tags.of(Tag.of("opl-httpStatus", String.valueOf(response.getStatus())));
+                Tags tags = Tags.empty();
+                if(tagsProviders != null) {
+                    tags = Tags.of(
+                    tagsProviders.stream()
+                            .flatMap(tP -> tP.getDynamicTags(request, response).entrySet().stream())
+                            .map( tag -> Tag.of(tag.getKey(), tag.getValue()))
+                            .collect(Collectors.toList())
+                    );
+                }
+                return tags;
             }
 
             @Override

@@ -1,10 +1,10 @@
 package com.moro.test.commons.logging.feign;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
-import com.moro.commons.context.http.ApplicationHttpContext;
+import com.moro.commons.context.http.ApplicationContextThroughHeaders;
 import com.moro.commons.context.http.feign.FeignRequestInterceptor;
 import com.moro.commons.logging.OccFeignLogger;
-import com.moro.test.commons.logging.TestHttpContext;
+import com.moro.test.commons.logging.TestContextThroughHeaders;
 import feign.Logger;
 import feign.RequestInterceptor;
 import okhttp3.OkHttpClient;
@@ -29,7 +29,7 @@ public class FeignTestConfig  {
     }
 
     @Bean
-    ApplicationHttpContext testContext() {return new TestHttpContext();}
+    ApplicationContextThroughHeaders testContext() {return new TestContextThroughHeaders();}
 
     @Bean
     Logger.Level feignLoggerLevel() {

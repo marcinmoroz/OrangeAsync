@@ -1,15 +1,14 @@
 package com.moro.test.commons.logging;
 
-import com.moro.commons.context.http.ApplicationHttpContext;
+import com.moro.commons.context.http.ApplicationContextThroughHeaders;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
 
 
 @Data
-public class TestHttpContext implements ApplicationHttpContext {
+public class TestContextThroughHeaders implements ApplicationContextThroughHeaders {
     String contextValue;;
 
     @Override

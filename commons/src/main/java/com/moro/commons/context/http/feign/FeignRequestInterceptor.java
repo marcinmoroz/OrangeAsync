@@ -1,6 +1,6 @@
 package com.moro.commons.context.http.feign;
 
-import com.moro.commons.context.http.ApplicationHttpContext;
+import com.moro.commons.context.http.ApplicationContextThroughHeaders;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Component
 public class FeignRequestInterceptor implements RequestInterceptor {
-    final List<ApplicationHttpContext> httpContexts;
+    final List<ApplicationContextThroughHeaders> httpContexts;
     @Override
     public void apply(RequestTemplate requestTemplate) {
         httpContexts.forEach( ct -> {

@@ -3,9 +3,9 @@ package com.moro.test.commons.logging.feign;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
-import com.moro.commons.context.http.ApplicationHttpContext;
+import com.moro.commons.context.http.ApplicationContextThroughHeaders;
 import com.moro.commons.logging.OccFeignLogger;
-import com.moro.test.commons.logging.TestHttpContext;
+import com.moro.test.commons.logging.TestContextThroughHeaders;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,7 +23,7 @@ public class OccFeignClientTest {
     @Autowired
     private WireMockServer mockService;
     @Autowired
-    ApplicationHttpContext testContext;
+    ApplicationContextThroughHeaders testContext;
 
     @Test
     public void shouldLogRequest() {
@@ -50,8 +50,8 @@ public class OccFeignClientTest {
         //        Given
         String expectedResponse = "HELLO WORLD";
         String passedContext = "Value1";
-        TestHttpContext context = (TestHttpContext)testContext;
-        ((TestHttpContext) testContext).setContextValue(passedContext);
+        TestContextThroughHeaders context = (TestContextThroughHeaders)testContext;
+        ((TestContextThroughHeaders) testContext).setContextValue(passedContext);
         mockService.stubFor(WireMock.get(
                 WireMock.urlEqualTo("/test")).
                 withHeader("contextValue", equalTo(passedContext)).
