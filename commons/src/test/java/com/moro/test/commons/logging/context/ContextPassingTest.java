@@ -4,12 +4,10 @@ import com.moro.commons.context.ApplicationContextTaskDecorator;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-
 import java.util.Arrays;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ContextPassingTest {
